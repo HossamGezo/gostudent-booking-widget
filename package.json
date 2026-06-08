@@ -1,0 +1,76 @@
+{
+  "name": "gostudent-booking-widget",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A pixel-perfect clone of GoStudent's dynamic checkout page built with React 19, TypeScript, and Tailwind CSS v4. Features robust form validation (React Hook Form + Zod), responsive RTL/Arabic support, and seamless WordPress integration via a custom shortcode plugin.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "prepare": "husky",
+    "tree": "tree -I 'node_modules|dist'"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{css,json,md}": [
+      "prettier --write"
+    ]
+  },
+  "keywords": [
+    "gostudent",
+    "reactjs",
+    "typescript",
+    "tailwindcss",
+    "wordpress-plugin",
+    "wordpress-shortcode",
+    "booking-widget",
+    "checkout-form",
+    "zod",
+    "react-hook-form",
+    "rtl",
+    "arabic-localization"
+  ],
+  "author": "Hossam Gouda <ha2ghossam10@gmail.com> (https://github.com/HossamGezo)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HossamGezo/gostudent-booking-widget/issues"
+  },
+  "homepage": "https://github.com/HossamGezo/gostudent-booking-widget#readme",
+  "dependencies": {
+    "@hookform/resolvers": "^5.4.0",
+    "clsx": "^2.1.1",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "react-hook-form": "^7.78.0",
+    "tailwind-merge": "^3.6.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@tailwindcss/vite": "^4.3.0",
+    "@types/node": "^24.12.3",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "eslint": "^10.3.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.6.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.3",
+    "prettier-plugin-tailwindcss": "^0.8.0",
+    "tailwindcss": "^4.3.0",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.59.2",
+    "vite": "^8.0.12",
+    "vite-tsconfig-paths": "^6.1.1"
+  }
+}
