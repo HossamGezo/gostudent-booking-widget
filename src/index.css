@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme {
+  /* --- Breakpoints --- */
+
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-xxl: 1400px;
+
+  /* --- Colors --- */
+
+  /* - Backgrounds */
+  --color-background: #f8fafc;
+  --color-background-overview: #f4f6fa;
+
+  /* - Brand & Actions */
+  --color-brand-primary: #2394f1;
+  --color-brand-hover: #1c85d7;
+  --color-brand-gradient-start: #4f73f8;
+  --color-brand-gradient-end: #00c6ff;
+
+  /* - Typography */
+  --color-text-primary: #1e293b;
+  --color-text-secondary: #64748b;
+  --color-text-inverse: #ffffff;
+
+  /* - Borders */
+  --color-border-default: #e2e8f0;
+  --color-border-focus: #2394f1;
+
+  /* - Feedback & Status */
+  --color-status-success: #22c55e;
+  --color-status-error: #ef4444;
+}
+
+.custom-container {
+  @apply xxl:max-w-330 mx-auto w-full px-4 sm:max-w-135 md:max-w-180 lg:max-w-240 xl:max-w-285;
+}
