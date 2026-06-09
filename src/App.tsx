@@ -1,4 +1,6 @@
-// --- Custom Components
+import { useState } from "react";
+
+import { DEFAULT_SESSIONS_COUNT } from "@constants/pricing";
 
 import CheckoutForm from "@components/form/CheckoutForm";
 import OrderSummary from "@components/form/OrderSummary";
@@ -6,6 +8,7 @@ import OrderSummary from "@components/form/OrderSummary";
 // --- Main Component
 
 const App = () => {
+  const [sessionsCount, setSessionsCount] = useState<number>(DEFAULT_SESSIONS_COUNT);
   return (
     <>
       <header className="py-4">
@@ -25,11 +28,11 @@ const App = () => {
       <main className="bg-background flex min-h-screen items-center justify-center">
         <div className="custom-container">
           <div className="border-border-default mx-auto grid max-w-4xl grid-cols-1 overflow-hidden rounded-lg border shadow-sm lg:grid-cols-11">
-            {/* LEFT COLUMN: Registration & Billing Form */}
-            <CheckoutForm />
+            {/* LEFT COLUMN: Checkout Form */}
+            <CheckoutForm sessionsCount={sessionsCount} setSessionsCount={setSessionsCount} />
 
-            {/* RIGHT COLUMN: Order Overview & Package Selector */}
-            <OrderSummary />
+            {/* RIGHT COLUMN: Order Summary */}
+            <OrderSummary sessionsCount={sessionsCount} />
           </div>
         </div>
       </main>
