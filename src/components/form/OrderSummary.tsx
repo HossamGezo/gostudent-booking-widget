@@ -1,5 +1,8 @@
 import { useState } from "react";
 
+import type { UseFormRegister, FieldErrors } from "react-hook-form";
+import { type BookingFormData } from "@utils/validationSchema";
+
 import { cn } from "@utils/cn";
 import { formatCurrency } from "@utils/formatCurrency";
 
@@ -13,9 +16,11 @@ import {
 
 interface OrderSummaryProps {
   sessionsCount: number;
+  register: UseFormRegister<BookingFormData>;
+  errors: FieldErrors<BookingFormData>;
 }
 
-const OrderSummary = ({ sessionsCount }: OrderSummaryProps) => {
+const OrderSummary = ({ sessionsCount, register, errors }: OrderSummaryProps) => {
   // --- State Management ---
 
   const [selectedMonths, setSelectedMonths] = useState<number>(DEFAULT_PLAN_MONTHS);
@@ -114,21 +119,28 @@ const OrderSummary = ({ sessionsCount }: OrderSummaryProps) => {
         </div>
       </div>
 
-      <div className="mx-auto mb-3.5 flex w-9/10 items-start gap-2">
-        <input type="checkbox" className="mt-1" />
-        <p className="text-text-secondary text-[12px]">
-          I accept the{" "}
-          <a href="#" className="text-brand-hover">
-            Terms & Conditions
-          </a>{" "}
-          and understand my{" "}
-          <a href="#" className="text-brand-hover">
-            right of withdrawal
-          </a>{" "}
-          as well as the circumstances that lead to a repeal of the same.
-        </p>
+      {/* --- Terms and Conditions --- */}
+      <div className="mx-auto mb-3.5 flex w-full flex-col gap-1 px-2">
+        <div className="flex items-start gap-2.5">
+          <input type="checkbox" className="mt-1 shrink-0 cursor-pointer" {...register("termsAccepted")} />
+          <p className="text-text-secondary text-[11px] leading-relaxed lg:text-[12px]">
+            I accept the{" "}
+            <a href="#" className="text-brand-hover transition-colors">
+              Terms & Conditions
+            </a>{" "}
+            and understand my{" "}
+            <a href="#" className="text-brand-hover transition-colors">
+              right of withdrawal
+            </a>{" "}
+            as well as the circumstances that lead to a repeal of the same.
+          </p>
+        </div>
+        {errors.termsAccepted?.message && (
+          <span className="text-status-error ml-6 block text-[10px] font-medium lg:text-[11px]">
+            {errors.termsAccepted.message}
+          </span>
+        )}
       </div>
-
       <button className="border-text-primary/80 from-brand-gradient-start to-brand-gradient-end w-full cursor-pointer rounded-sm border bg-linear-to-r p-3 text-[14px] font-bold text-white shadow-lg transition-all hover:opacity-95 active:scale-[0.995]">
         Order Now
       </button>
