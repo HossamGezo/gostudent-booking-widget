@@ -1,5 +1,5 @@
 import { COUNTRIES } from "@constants/countries";
-import { DEFAULT_SESSIONS_COUNT, MONTHLY_SESSIONS_OPTIONS } from "@constants/pricing";
+import { MONTHLY_SESSIONS_OPTIONS } from "@constants/pricing";
 
 import Input from "@components/ui/Input";
 import Select from "@components/ui/Select";
@@ -7,14 +7,19 @@ import Title from "@components/ui/Title";
 import PhoneInput from "@components/form/PhoneInput";
 import CardDetailsInput from "@components/form/CardDetailsInput";
 
-const CheckoutForm = () => {
+interface CheckoutFormProps {
+  sessionsCount: number;
+  setSessionsCount: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const CheckoutForm = ({ sessionsCount, setSessionsCount }: CheckoutFormProps) => {
   return (
-    <section className="bg-text-inverse relative col-span-1 p-5 lg:col-span-6 lg:p-8">
+    <section className="bg-text-inverse relative col-span-1 p-5 lg:col-span-6 lg:px-12 lg:py-8">
       <div className="mb-5 flex flex-col items-center justify-center">
         <h2 className="text-[15px] font-bold lg:text-[18px]">Registration & Booking at GoStudent</h2>
         <p className="text-[12px] font-extralight lg:text-[13px]">The leading platform for online tutoring.</p>
       </div>
-      <form className="flex flex-col gap-6.5">
+      <form className="flex flex-col gap-7">
         <div>
           <Title title={"LOGIN PHONE NUMBER"} note={"preferably the student's"} />
           <PhoneInput />
@@ -61,9 +66,13 @@ const CheckoutForm = () => {
 
         <div>
           <Title title={"MONTHLY SESSIONS"} />
-          <Select className="border-border-default w-full border py-3">
+          <Select
+            className="border-border-default w-full border py-3"
+            value={sessionsCount}
+            onChange={(e) => setSessionsCount(Number(e.target.value))}
+          >
             {MONTHLY_SESSIONS_OPTIONS.map((session) => (
-              <option key={session.value} value={session.label} selected={session.value == DEFAULT_SESSIONS_COUNT}>
+              <option key={session.value} value={session.value}>
                 <span>{session.label}</span>
               </option>
             ))}
