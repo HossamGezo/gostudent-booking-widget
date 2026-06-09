@@ -1,5 +1,6 @@
 import type { UseFormRegister, FieldErrors } from "react-hook-form";
 import { type BookingFormData } from "@utils/validationSchema";
+import { translations, translateError } from "@constants/translations"; // استيراد دالة الترجمة
 
 import { COUNTRIES } from "@constants/countries";
 import { MONTHLY_SESSIONS_OPTIONS } from "@constants/pricing";
@@ -10,12 +11,12 @@ import Title from "@components/ui/Title";
 import PhoneInput from "@components/form/PhoneInput";
 import CardDetailsInput from "@components/form/CardDetailsInput";
 
-// --- Helper Component for displaying errors cleanly
-
-const ErrorMsg = ({ msg }: { msg?: string }) => {
+const ErrorMsg = ({ msg, lang }: { msg?: string; lang: "en" | "ar" }) => {
   if (!msg) return null;
   return (
-    <span className="text-status-error mt-1.5 block text-[9px] leading-tight font-medium md:text-[10px]">{msg}</span>
+    <span className="text-status-error mt-1.5 block text-[10px] leading-tight font-medium">
+      {translateError(msg, lang)}
+    </span>
   );
 };
 
@@ -24,70 +25,73 @@ interface CheckoutFormProps {
   setSessionsCount: React.Dispatch<React.SetStateAction<number>>;
   register: UseFormRegister<BookingFormData>;
   errors: FieldErrors<BookingFormData>;
+  lang: "en" | "ar";
 }
 
-const CheckoutForm = ({ sessionsCount, setSessionsCount, register, errors }: CheckoutFormProps) => {
+const CheckoutForm = ({ sessionsCount, setSessionsCount, register, errors, lang }: CheckoutFormProps) => {
+  const t = translations[lang];
+
   return (
     <section className="bg-text-inverse relative col-span-1 p-5 lg:col-span-6 lg:px-12 lg:py-8">
-      <div className="mb-5 flex flex-col items-center justify-center">
-        <h2 className="text-[15px] font-bold lg:text-[18px]">Registration & Booking at GoStudent</h2>
-        <p className="text-[12px] font-extralight lg:text-[13px]">The leading platform for online tutoring.</p>
+      <div className="mb-5 flex flex-col items-center justify-center text-center">
+        <h2 className="text-[15px] font-bold lg:text-[18px]">{t.title}</h2>
+        <p className="text-[12px] font-extralight lg:text-[13px]">{t.subtitle}</p>
       </div>
 
       <div className="flex flex-col gap-7">
         {/* --- Phone Inputs --- */}
         <div>
-          <Title title={"LOGIN PHONE NUMBER"} note={"the student's"} />
+          <Title title={t.loginPhone} note={t.loginPhoneNote} lang={lang} />
           <PhoneInput {...register("loginPhone")} />
-          <ErrorMsg msg={errors.loginPhone?.message} />
+          <ErrorMsg msg={errors.loginPhone?.message} lang={lang} />
         </div>
 
         <div>
-          <Title title={"CONTACT PHONE NUMBER"} note={"the parent's"} />
+          <Title title={t.contactPhone} note={t.contactPhoneNote} lang={lang} />
           <PhoneInput {...register("contactPhone")} />
-          <ErrorMsg msg={errors.contactPhone?.message} />
+          <ErrorMsg msg={errors.contactPhone?.message} lang={lang} />
         </div>
 
         {/* --- Basic Inputs --- */}
         <div>
-          <Title title={"CONTACT EMAIL ADDRESS"} note={"the parent's"} />
+          <Title title={t.email} note={t.emailNote} lang={lang} />
           <Input type="email" {...register("email")} />
-          <ErrorMsg msg={errors.email?.message} />
+          <ErrorMsg msg={errors.email?.message} lang={lang} />
         </div>
 
         <div>
-          <Title title={"CONTACT NAME"} />
+          <Title title={t.contactName} />
           <Input {...register("name")} />
-          <ErrorMsg msg={errors.name?.message} />
+          <ErrorMsg msg={errors.name?.message} lang={lang} />
         </div>
 
         <div>
-          <Title title={"BILLING ADDRESS"} />
+          <Title title={t.billingAddress} />
           <div className="flex flex-col gap-6.5">
-            <div className="flex gap-4">
-              <div className="w-3/4">
-                <Input placeholder="Address" {...register("address")} />
-                <ErrorMsg msg={errors.address?.message} />
+            <div className="flex gap-3">
+              <div className="w-[70%]">
+                <Input placeholder={t.address} {...register("address")} />
+                <ErrorMsg msg={errors.address?.message} lang={lang} />
               </div>
-              <div className="w-1/4">
-                <Input placeholder="Nr" {...register("nr")} />
-                <ErrorMsg msg={errors.nr?.message} />
+              <div className="w-[30%]">
+                <Input placeholder={t.nr} {...register("nr")} />
+                <ErrorMsg msg={errors.nr?.message} lang={lang} />
               </div>
             </div>
 
             <div className="flex gap-4">
               <div className="w-1/3">
-                <Input placeholder="Postal code" {...register("postalCode")} />
-                <ErrorMsg msg={errors.postalCode?.message} />
+                <Input placeholder={t.postalCode} {...register("postalCode")} />
+                <ErrorMsg msg={errors.postalCode?.message} lang={lang} />
               </div>
               <div className="w-1/3">
-                <Input placeholder="City" {...register("city")} />
-                <ErrorMsg msg={errors.city?.message} />
+                <Input placeholder={t.city} {...register("city")} />
+                <ErrorMsg msg={errors.city?.message} lang={lang} />
               </div>
               <div className="w-1/3">
                 <Select className="border-border-default w-full border" {...register("country")}>
                   <option value="" disabled>
-                    Country
+                    {t.country}
                   </option>
                   {COUNTRIES.map((country) => (
                     <option key={country.code} value={country.name}>
@@ -95,7 +99,7 @@ const CheckoutForm = ({ sessionsCount, setSessionsCount, register, errors }: Che
                     </option>
                   ))}
                 </Select>
-                <ErrorMsg msg={errors.country?.message} />
+                <ErrorMsg msg={errors.country?.message} lang={lang} />
               </div>
             </div>
           </div>
@@ -103,7 +107,7 @@ const CheckoutForm = ({ sessionsCount, setSessionsCount, register, errors }: Che
 
         {/* --- Monthly Sessions --- */}
         <div>
-          <Title title={"MONTHLY SESSIONS"} />
+          <Title title={t.monthlySessions} />
           <Select
             className="border-border-default w-full border py-3"
             value={sessionsCount}
@@ -111,7 +115,7 @@ const CheckoutForm = ({ sessionsCount, setSessionsCount, register, errors }: Che
           >
             {MONTHLY_SESSIONS_OPTIONS.map((session) => (
               <option key={session.value} value={session.value}>
-                {session.label}
+                {lang === "ar" ? `${session.value} حصص` : session.label}
               </option>
             ))}
           </Select>
@@ -119,7 +123,7 @@ const CheckoutForm = ({ sessionsCount, setSessionsCount, register, errors }: Che
 
         {/* --- Payment Methods --- */}
         <div className="flex flex-col">
-          <Title title={"SELECT PAYMENT METHOD"} />
+          <Title title={t.paymentMethod} />
 
           <label
             htmlFor="sepa"
@@ -136,17 +140,17 @@ const CheckoutForm = ({ sessionsCount, setSessionsCount, register, errors }: Che
             </label>
 
             <div className="flex flex-col gap-2">
-              <Input placeholder="Card holder" {...register("cardHolder")} />
-              <ErrorMsg msg={errors.cardHolder?.message} />
+              <Input placeholder={t.cardHolder} {...register("cardHolder")} />
+              <ErrorMsg msg={errors.cardHolder?.message} lang={lang} />
 
-              <CardDetailsInput register={register} errors={errors} />
+              <CardDetailsInput register={register} errors={errors} lang={lang} />
             </div>
           </div>
         </div>
       </div>
 
-      <span className="text-text-secondary mt-2 block text-[9px] italic lg:absolute lg:bottom-2 lg:mt-0 lg:text-left">
-        100% secure payment. All data is encrypted.
+      <span className="text-text-secondary mt-2 block text-[9px] italic lg:absolute lg:bottom-2 lg:mt-0 ltr:lg:left-12 rtl:lg:right-12">
+        {t.securePayment}
       </span>
     </section>
   );
