@@ -1,10 +1,10 @@
 import { useState } from "react";
-
 import type { UseFormRegister, FieldErrors } from "react-hook-form";
 import { type BookingFormData } from "@utils/validationSchema";
 
 import { cn } from "@utils/cn";
 import { formatCurrency } from "@utils/formatCurrency";
+import { translations, translateError } from "@constants/translations";
 
 import {
   PLAN_MONTHS,
@@ -18,16 +18,21 @@ interface OrderSummaryProps {
   sessionsCount: number;
   register: UseFormRegister<BookingFormData>;
   errors: FieldErrors<BookingFormData>;
+  lang: "en" | "ar";
 }
 
-const OrderSummary = ({ sessionsCount, register, errors }: OrderSummaryProps) => {
-  // --- State Management ---
+const OrderSummary = ({ sessionsCount, register, errors, lang }: OrderSummaryProps) => {
+  const t = translations[lang];
 
+  const currencyCode = lang === "ar" ? "SAR" : "EUR";
+  const currencyLocale = lang === "ar" ? "ar-SA" : "de-DE";
+  const conversionRate = lang === "ar" ? 4 : 1;
+
+  // --- State Management ---
   const [selectedMonths, setSelectedMonths] = useState<number>(DEFAULT_PLAN_MONTHS);
   const [isPayInAdvance, setIsPayInAdvance] = useState<boolean>(false);
 
   // --- Dynamic Pricing Calculations ---
-
   const currentPlan = PRICING_PLANS[selectedMonths];
 
   const regularPricePerSession = currentPlan.regularPricePerSession;
@@ -46,7 +51,8 @@ const OrderSummary = ({ sessionsCount, register, errors }: OrderSummaryProps) =>
 
   return (
     <section className="bg-background-overview relative col-span-1 p-5 lg:col-span-5 lg:p-8">
-      <h3 className="mb-6 text-[12px] font-bold">ORDER OVERVIEW</h3>
+      <h3 className="mb-6 text-[12px] font-bold">{t.orderOverview}</h3>
+
       {/* --- Interactive Durations Grid ---- */}
       <div className="mb-6 grid grid-cols-3">
         {PLAN_MONTHS.map((month) => {
@@ -60,7 +66,7 @@ const OrderSummary = ({ sessionsCount, register, errors }: OrderSummaryProps) =>
                 month.value === selectedMonths && "border-brand-primary hover:border-brand-primary z-20",
               )}
             >
-              {month.label}
+              {lang === "ar" ? `${month.value} أشهر` : month.label}
             </button>
           );
         })}
@@ -83,38 +89,48 @@ const OrderSummary = ({ sessionsCount, register, errors }: OrderSummaryProps) =>
             )}
           ></span>
         </button>
-        <p className="text-[10px] font-bold">Pay in advance - EXTRA 5% DISCOUNT</p>
+        <p className="text-[10px] font-bold">{t.payInAdvance}</p>
       </div>
 
       {/* --- Prices --- */}
       <div className="border-b-text-inverse mb-3.5 flex flex-col gap-3.5 border-b-2 pb-5">
         <div className="text-text-secondary flex items-center justify-between text-[11px]">
-          <span>NUMBER OF SESSIONS P.M.</span>
+          <span>{t.numSessions}</span>
           <span className="text-text-primary font-bold">{sessionsCount}</span>
         </div>
         <div className="text-text-secondary flex items-center justify-between text-[11px]">
-          <span>REGULAR PRICE</span>
-          <span className="text-text-primary font-bold line-through">{formatCurrency(regularPricePerSession)}</span>
+          <span>{t.regularPrice}</span>
+          <span className="text-text-primary font-bold line-through" dir="ltr">
+            {formatCurrency(regularPricePerSession * conversionRate, currencyCode, currencyLocale)}
+          </span>
         </div>
         <div className="text-text-secondary flex items-center justify-between text-[11px]">
-          <span>YOUR PRICE</span>
-          <span className="text-text-primary font-bold">{formatCurrency(yourPricePerSession)}</span>
+          <span>{t.yourPrice}</span>
+          <span className="text-text-primary font-bold" dir="ltr">
+            {formatCurrency(yourPricePerSession * conversionRate, currencyCode, currencyLocale)}
+          </span>
         </div>
         <div className="text-status-success flex items-center justify-between text-[11px]">
-          <span className="text-[11px] font-semibold">DISCOUNT -{discountPercentage}%</span>
-          <span className="text-[16px] font-bold">-{formatCurrency(totalDiscountValue)}</span>
+          <span className="text-[11px] font-semibold">
+            {t.discount} <span dir="ltr">-{discountPercentage}%</span>
+          </span>
+          <span className="text-[16px] font-bold" dir="ltr">
+            -{formatCurrency(totalDiscountValue * conversionRate, currencyCode, currencyLocale)}
+          </span>
         </div>
       </div>
 
       <div className="mb-3.5 flex flex-col gap-3.5">
         <div className="text-text-secondary flex items-center justify-between text-[12px]">
-          <span>Setup fee</span>
-          <span className="text-brand-gradient-start text-[16px] font-extrabold">{formatCurrency(SETUP_FEE)}</span>
+          <span>{t.setupFee}</span>
+          <span className="text-brand-gradient-start text-[16px] font-extrabold" dir="ltr">
+            {formatCurrency(SETUP_FEE * conversionRate, currencyCode, currencyLocale)}
+          </span>
         </div>
         <div className="text-text-secondary flex items-center justify-between text-[12px]">
-          <span>TOTAL P.M.</span>
-          <span className="text-brand-gradient-start text-[16px] font-extrabold">
-            {formatCurrency(totalMonthlyPrice)}
+          <span>{t.totalPm}</span>
+          <span className="text-brand-gradient-start text-[16px] font-extrabold" dir="ltr">
+            {formatCurrency(totalMonthlyPrice * conversionRate, currencyCode, currencyLocale)}
           </span>
         </div>
       </div>
@@ -124,28 +140,33 @@ const OrderSummary = ({ sessionsCount, register, errors }: OrderSummaryProps) =>
         <div className="flex items-start gap-2.5">
           <input type="checkbox" className="mt-1 shrink-0 cursor-pointer" {...register("termsAccepted")} />
           <p className="text-text-secondary text-[11px] leading-relaxed lg:text-[12px]">
-            I accept the{" "}
+            {t.termsText1}
             <a href="#" className="text-brand-hover transition-colors">
-              Terms & Conditions
+              {t.termsLink}
             </a>{" "}
-            and understand my{" "}
+            {t.termsText2}
             <a href="#" className="text-brand-hover transition-colors">
-              right of withdrawal
+              {t.termsLink2}
             </a>{" "}
-            as well as the circumstances that lead to a repeal of the same.
+            {t.termsText3}
           </p>
         </div>
         {errors.termsAccepted?.message && (
           <span className="text-status-error ml-6 block text-[10px] font-medium lg:text-[11px]">
-            {errors.termsAccepted.message}
+            {translateError(errors.termsAccepted.message, lang)}
           </span>
         )}
       </div>
-      <button className="border-text-primary/80 from-brand-gradient-start to-brand-gradient-end w-full cursor-pointer rounded-sm border bg-linear-to-r p-3 text-[14px] font-bold text-white shadow-lg transition-all hover:opacity-95 active:scale-[0.995]">
-        Order Now
+
+      <button
+        type="submit"
+        className="border-text-primary/80 from-brand-gradient-start to-brand-gradient-end w-full cursor-pointer rounded-sm border bg-linear-to-r p-3 text-[14px] font-bold text-white shadow-lg transition-all hover:opacity-95 active:scale-[0.995]"
+      >
+        {t.orderNow}
       </button>
+
       <span className="text-text-secondary mt-8 block text-center text-[13px] font-bold lg:absolute lg:right-1/2 lg:bottom-5 lg:mt-0 lg:translate-x-1/2">
-        95% SATISFACTION RATE!
+        {t.satisfaction}
       </span>
     </section>
   );

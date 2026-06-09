@@ -1,17 +1,19 @@
 import type { UseFormRegister, FieldErrors } from "react-hook-form";
 import { type BookingFormData } from "@utils/validationSchema";
+import { translateError } from "@constants/translations";
 
 interface CardDetailsInputProps {
   register: UseFormRegister<BookingFormData>;
   errors: FieldErrors<BookingFormData>;
+  lang: "en" | "ar";
 }
 
-const CardDetailsInput = ({ register, errors }: CardDetailsInputProps) => {
+const CardDetailsInput = ({ register, errors, lang }: CardDetailsInputProps) => {
   return (
     <div className="flex flex-col">
       <div className="bg-background-overview border-border-default focus-within:border-border-focus flex h-10.5 items-center rounded-[3px] border transition-colors">
         {/* Left Side: SVG Icon */}
-        <div className="flex h-full items-center justify-center pr-1 pl-1.5">
+        <div className="flex h-full shrink-0 items-center justify-center pr-1 pl-1.5">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="50 120 300 190"
@@ -30,29 +32,32 @@ const CardDetailsInput = ({ register, errors }: CardDetailsInputProps) => {
           </svg>
         </div>
 
-        {/* Card Number Input Field */}
         <input
           type="text"
-          placeholder="Card number"
-          className="placeholder:text-text-secondary text-text-primary h-full w-3/5 bg-transparent text-[10px] outline-hidden placeholder:text-[10px]"
+          placeholder={lang === "ar" ? "رقم البطاقة" : "Card number"}
+          className="placeholder:text-text-secondary text-text-primary h-full w-3/5 bg-transparent px-2 text-[11px] outline-hidden placeholder:text-[11px]"
           {...register("cardNumber")}
         />
 
-        {/* Expiry Date & CVC Field */}
+        <div className="bg-border-default h-5 w-px shrink-0"></div>
+
         <input
           type="text"
-          placeholder="MM / YY CVC"
-          className="placeholder:text-text-secondary text-text-primary h-full w-2/5 bg-transparent pr-1 text-right text-[10px] outline-hidden placeholder:text-right placeholder:text-[10px]"
+          placeholder={lang === "ar" ? "الشهر / السنة  CVC" : "MM / YY CVC"}
+          className="placeholder:text-text-secondary text-text-primary h-full w-2/5 bg-transparent px-2 text-right text-[11px] outline-hidden placeholder:text-[11px]"
           {...register("expiryAndCvc")}
         />
       </div>
 
-      {/* Errors */}
       {errors.cardNumber?.message && (
-        <span className="text-status-error mt-1 block text-[10px] font-medium">{errors.cardNumber.message}</span>
+        <span className="text-status-error mt-1 block text-[10px] font-medium">
+          {translateError(errors.cardNumber.message, lang)}
+        </span>
       )}
       {errors.expiryAndCvc?.message && (
-        <span className="text-status-error mt-1 block text-[10px] font-medium">{errors.expiryAndCvc.message}</span>
+        <span className="text-status-error mt-1 block text-[10px] font-medium">
+          {translateError(errors.expiryAndCvc.message, lang)}
+        </span>
       )}
     </div>
   );
