@@ -4,3 +4,10 @@ export interface Country {
   dialCode: string;
   flag: string;
 }
+
+export interface PricingPlan {
+  months: number;
+  regularPricePerSession: number;
+  discountedPricePerSession: number;
+  discountPercentage: number;
+}
