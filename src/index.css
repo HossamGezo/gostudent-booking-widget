@@ -1,8 +1,48 @@
+/* (Regular - 400) */
+@font-face {
+  font-family: "Google Sans";
+  src: url("./fonts/GoogleSansFlex_24pt-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* (Medium - 500) */
+@font-face {
+  font-family: "Google Sans";
+  src: url("./fonts/GoogleSansFlex_24pt-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* (SemiBold - 600) */
+@font-face {
+  font-family: "Google Sans";
+  src: url("./fonts/GoogleSansFlex_24pt-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* (Bold - 700) */
+@font-face {
+  font-family: "Google Sans";
+  src: url("./fonts/GoogleSansFlex_24pt-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ------------------------------------------------ */
+
 @import "tailwindcss";
 
 @theme {
-  /* --- Breakpoints --- */
+  --default-font-family: "Google Sans", sans-serif;
+  --font-sans: "Google Sans", sans-serif;
 
+  /* --- Breakpoints --- */
   --breakpoint-sm: 576px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 992px;
@@ -34,6 +74,13 @@
   /* - Feedback & Status */
   --color-status-success: #93d74a;
   --color-status-error: #ef4444;
+}
+
+html,
+body,
+:root,
+:host {
+  font-family: "Google Sans", sans-serif !important;
 }
 
 body {
