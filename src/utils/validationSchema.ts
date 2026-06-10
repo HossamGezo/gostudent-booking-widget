@@ -55,7 +55,7 @@ export const bookingSchema = z
       // - Validation for Card Holder (Only letters and spaces, min 3 chars)
       if (!data.cardHolder || !/^[a-zA-Z\s]{3,50}$/.test(data.cardHolder.trim())) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           message: "Please enter a valid card holder name (letters only)",
           path: ["cardHolder"],
         });
@@ -64,19 +64,49 @@ export const bookingSchema = z
       // - Validation for Card Number (Exactly 16 digits)
       if (!data.cardNumber || !/^\d{16}$/.test(data.cardNumber.trim())) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           message: "Card number must be exactly 16 digits",
           path: ["cardNumber"],
         });
       }
 
-      // - Validation for Expiry and CVC (Format: MM / YY CVC)
       if (!data.expiryAndCvc || !/^(0[1-9]|1[0-2])\s?\/\s?\d{2}\s\d{3,4}$/.test(data.expiryAndCvc.trim())) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           message: "Invalid format. Expected: MM / YY CVC (e.g., 12 / 26 123)",
           path: ["expiryAndCvc"],
         });
+      } else {
+        const match = data.expiryAndCvc.trim().match(/^(0[1-9]|1[0-2])\s?\/\s?(\d{2})\s/);
+
+        if (match) {
+          const enteredMonth = parseInt(match[1], 10);
+          const enteredYear = parseInt("20" + match[2], 10);
+
+          const currentDate = new Date();
+          const currentYear = currentDate.getFullYear();
+          const currentMonth = currentDate.getMonth() + 1;
+
+          if (enteredYear < currentYear) {
+            ctx.addIssue({
+              code: "custom",
+              message: "The card has expired (Year is in the past)",
+              path: ["expiryAndCvc"],
+            });
+          } else if (enteredYear === currentYear && enteredMonth < currentMonth) {
+            ctx.addIssue({
+              code: "custom",
+              message: "The card has expired (Month is in the past)",
+              path: ["expiryAndCvc"],
+            });
+          } else if (enteredYear > currentYear + 10) {
+            ctx.addIssue({
+              code: "custom",
+              message: "Invalid expiry year (Too far in the future)",
+              path: ["expiryAndCvc"],
+            });
+          }
+        }
       }
     }
   });
