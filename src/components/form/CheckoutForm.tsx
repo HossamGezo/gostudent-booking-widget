@@ -1,9 +1,10 @@
 import type { UseFormRegister, FieldErrors } from "react-hook-form";
-import { type BookingFormData } from "@utils/validationSchema";
-import { translations, translateError } from "@constants/translations"; // استيراد دالة الترجمة
 
 import { COUNTRIES } from "@constants/countries";
 import { MONTHLY_SESSIONS_OPTIONS } from "@constants/pricing";
+import { translations, translateError } from "@constants/translations";
+
+import { type BookingFormData } from "@utils/validationSchema";
 
 import Input from "@components/ui/Input";
 import Select from "@components/ui/Select";
@@ -68,12 +69,12 @@ const CheckoutForm = ({ sessionsCount, setSessionsCount, register, errors, lang 
         <div>
           <Title title={t.billingAddress} />
           <div className="flex flex-col gap-6.5">
-            <div className="flex gap-3">
-              <div className="w-[70%]">
+            <div className="flex gap-4">
+              <div className="w-[80%]">
                 <Input placeholder={t.address} {...register("address")} />
                 <ErrorMsg msg={errors.address?.message} lang={lang} />
               </div>
-              <div className="w-[30%]">
+              <div className="w-[20%]">
                 <Input placeholder={t.nr} {...register("nr")} />
                 <ErrorMsg msg={errors.nr?.message} lang={lang} />
               </div>

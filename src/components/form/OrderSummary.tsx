@@ -62,7 +62,7 @@ const OrderSummary = ({ sessionsCount, register, errors, lang }: OrderSummaryPro
               type="button"
               onClick={() => setSelectedMonths(month.value)}
               className={cn(
-                "text-text-secondary border-border-default hover:border-brand-hover relative col-span-1 -mt-px -ml-px flex cursor-pointer items-center justify-center border bg-white p-3 text-[10px] transition-colors duration-100 hover:z-10 focus:z-10",
+                "text-text-secondary border-border-default hover:border-brand-hover relative col-span-1 -mt-px -ml-px flex cursor-pointer items-center border bg-white p-3 text-[10px] transition-colors duration-100 hover:z-10 focus:z-10",
                 month.value === selectedMonths && "border-brand-primary hover:border-brand-primary z-20",
               )}
             >
