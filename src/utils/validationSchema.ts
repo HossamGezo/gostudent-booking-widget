@@ -3,6 +3,7 @@ import { z } from "zod";
 export const bookingSchema = z
   .object({
     // --- Personal Information ---
+    loginPhoneCountry: z.string().min(1, "Country code is required"),
     loginPhone: z
       .string()
       .min(1, "Login phone number is required")
@@ -11,6 +12,7 @@ export const bookingSchema = z
       .refine((val) => !val.startsWith("0"), "Phone number must not start with a leading 0")
       .refine((val) => val.length >= 6 && val.length <= 14, "Phone number must be between 6 and 14 digits"),
 
+    contactPhoneCountry: z.string().min(1, "Country code is required"),
     contactPhone: z
       .string()
       .min(1, "Contact phone number is required")
@@ -19,7 +21,7 @@ export const bookingSchema = z
       .refine((val) => !val.startsWith("0"), "Phone number must not start with a leading 0")
       .refine((val) => val.length >= 6 && val.length <= 14, "Phone number must be between 6 and 14 digits"),
 
-    email: z.string().min(1, "Email address is required").email("Please enter a valid email address").trim(),
+    email: z.string().email({ message: "Invalid Email Address" }).trim(),
 
     name: z
       .string()
@@ -33,6 +35,7 @@ export const bookingSchema = z
     postalCode: z.string().min(3, "Invalid postal code").regex(/^\d+$/, "Postal code must contain numbers only").trim(),
     city: z.string().min(1, "City is required").trim(),
     country: z.string().min(1, "Please select a country"),
+    sessions: z.number().min(4).max(16),
 
     // --- Payment Configuration ---
     paymentMethod: z.enum(["sepa", "visa"]),
