@@ -35,7 +35,7 @@ const CardDetailsInput = ({ register, errors, lang }: CardDetailsInputProps) => 
         <input
           type="text"
           placeholder={lang === "ar" ? "رقم البطاقة" : "Card number"}
-          className="placeholder:text-text-secondary text-text-primary h-full w-3/5 bg-transparent px-2 text-[11px] outline-hidden placeholder:text-[11px]"
+          className="placeholder:text-text-primary/60 text-text-primary h-full w-3/5 bg-transparent px-2 text-[11px] placeholder:text-[11px]"
           {...register("cardNumber")}
         />
 
@@ -44,7 +44,7 @@ const CardDetailsInput = ({ register, errors, lang }: CardDetailsInputProps) => 
         <input
           type="text"
           placeholder={lang === "ar" ? "الشهر / السنة  CVC" : "MM / YY CVC"}
-          className="placeholder:text-text-secondary text-text-primary h-full w-2/5 bg-transparent px-2 text-right text-[11px] outline-hidden placeholder:text-[11px]"
+          className="placeholder:text-text-primary/60 text-text-primary h-full w-2/5 bg-transparent px-2 text-right text-[11px] placeholder:text-[11px]"
           {...register("expiryAndCvc")}
         />
       </div>
