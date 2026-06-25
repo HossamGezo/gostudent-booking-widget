@@ -9,7 +9,7 @@ const Select = ({ children, className, ref, ...props }: SelectProps) => {
     <select
       ref={ref}
       className={cn(
-        "bg-background-overview text-text-secondary h-10.5 w-1/3 rounded-[3px] border border-transparent px-1.5 text-[10px] outline-hidden",
+        "bg-background-overview text-text-primary/60 h-10.5 w-1/3 rounded-[3px] border border-transparent px-1.5 text-[10px]",
         className,
       )}
       {...props}

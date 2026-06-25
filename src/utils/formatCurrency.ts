@@ -13,3 +13,8 @@ export const formatCurrency = (
     maximumFractionDigits: 2,
   }).format(amount);
 };
+
+export const formatNumber = (value: number | string | undefined | null, locale: string = "de-DE") => {
+  const num = Number(value) || 0;
+  return new Intl.NumberFormat(locale).format(num);
+};

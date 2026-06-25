@@ -21,7 +21,7 @@ A high-performance, dynamic checkout and registration form cloned from GoStudent
 <br />
 <br />
 
-[**🌐 Live Demo**](https://gostudent-booking-widget.netlify.app/)
+[**🌐 Live Demo**](https://gostudent-booking-widget.vercel.app/)
 
 </div>
 

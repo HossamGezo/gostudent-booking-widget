@@ -1,36 +1,40 @@
-import { useState } from "react";
 import type { UseFormRegister, FieldErrors } from "react-hook-form";
 import { type BookingFormData } from "@utils/validationSchema";
 
 import { cn } from "@utils/cn";
-import { formatCurrency } from "@utils/formatCurrency";
+import { formatCurrency, formatNumber } from "@utils/formatCurrency";
 import { translations, translateError } from "@constants/translations";
 
-import {
-  PLAN_MONTHS,
-  DEFAULT_PLAN_MONTHS,
-  PRICING_PLANS,
-  SETUP_FEE,
-  ADVANCED_PAYMENT_DISCOUNT_PCT,
-} from "@constants/pricing";
+import { PLAN_MONTHS, PRICING_PLANS, SETUP_FEE, ADVANCED_PAYMENT_DISCOUNT_PCT } from "@constants/pricing";
 
 interface OrderSummaryProps {
   sessionsCount: number;
+  selectedMonths: number;
+  setSelectedMonths: React.Dispatch<React.SetStateAction<number>>;
+  isPayInAdvance: boolean;
+  setIsPayInAdvance: React.Dispatch<React.SetStateAction<boolean>>;
   register: UseFormRegister<BookingFormData>;
   errors: FieldErrors<BookingFormData>;
   lang: "en" | "ar";
 }
 
-const OrderSummary = ({ sessionsCount, register, errors, lang }: OrderSummaryProps) => {
+const OrderSummary = ({
+  sessionsCount,
+  selectedMonths,
+  setSelectedMonths,
+  isPayInAdvance,
+  setIsPayInAdvance,
+  register,
+  errors,
+  lang,
+}: OrderSummaryProps) => {
   const t = translations[lang];
 
   const currencyCode = lang === "ar" ? "SAR" : "EUR";
   const currencyLocale = lang === "ar" ? "ar-SA" : "de-DE";
+  // const currencyLocale = lang === "ar" ? "ar-AE-u-nu-arab" : "de-DE";
+  // const currencyLocale = lang === "ar" ? "ar-AE" : "en-IE";
   const conversionRate = lang === "ar" ? 4 : 1;
-
-  // --- State Management ---
-  const [selectedMonths, setSelectedMonths] = useState<number>(DEFAULT_PLAN_MONTHS);
-  const [isPayInAdvance, setIsPayInAdvance] = useState<boolean>(false);
 
   // --- Dynamic Pricing Calculations ---
   const currentPlan = PRICING_PLANS[selectedMonths];
@@ -51,7 +55,7 @@ const OrderSummary = ({ sessionsCount, register, errors, lang }: OrderSummaryPro
 
   return (
     <section className="bg-background-overview relative col-span-1 p-5 lg:col-span-5 lg:p-8">
-      <h3 className="mb-6 text-[12px] font-bold">{t.orderOverview}</h3>
+      <h3 className="mb-6 text-[10px]! font-bold!">{t.orderOverview}</h3>
 
       {/* --- Interactive Durations Grid ---- */}
       <div className="mb-6 grid grid-cols-3">
@@ -62,11 +66,11 @@ const OrderSummary = ({ sessionsCount, register, errors, lang }: OrderSummaryPro
               type="button"
               onClick={() => setSelectedMonths(month.value)}
               className={cn(
-                "text-text-secondary border-border-default hover:border-brand-hover relative col-span-1 -mt-px -ml-px flex cursor-pointer items-center justify-center border bg-white p-3 text-[10px] transition-colors duration-100 hover:z-10 focus:z-10",
+                "text-text-secondary border-border-default hover:border-brand-hover relative col-span-1 -mt-px -ml-px flex cursor-pointer items-center border bg-white p-3 text-[10px] transition-colors duration-100 hover:z-10 focus:z-10",
                 month.value === selectedMonths && "border-brand-primary hover:border-brand-primary z-20",
               )}
             >
-              {lang === "ar" ? `${month.value} أشهر` : month.label}
+              {lang === "ar" ? `${formatNumber(month.value, currencyLocale)} أشهر` : month.label}
             </button>
           );
         })}
@@ -138,14 +142,14 @@ const OrderSummary = ({ sessionsCount, register, errors, lang }: OrderSummaryPro
       {/* --- Terms and Conditions --- */}
       <div className="mx-auto mb-3.5 flex w-full flex-col gap-1 px-2">
         <div className="flex items-start gap-2.5">
-          <input type="checkbox" className="mt-1 shrink-0 cursor-pointer" {...register("termsAccepted")} />
+          <input type="checkbox" className="mt-1! shrink-0 cursor-pointer" {...register("termsAccepted")} />
           <p className="text-text-secondary text-[11px] leading-relaxed lg:text-[12px]">
             {t.termsText1}
-            <a href="#" className="text-brand-hover transition-colors">
+            <a href="#" className="text-brand-hover! hover:text-brand-primary! transition-colors">
               {t.termsLink}
             </a>{" "}
             {t.termsText2}
-            <a href="#" className="text-brand-hover transition-colors">
+            <a href="#" className="text-brand-hover! hover:text-brand-primary! transition-colors">
               {t.termsLink2}
             </a>{" "}
             {t.termsText3}

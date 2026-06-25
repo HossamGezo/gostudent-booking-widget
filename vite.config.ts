@@ -9,6 +9,7 @@ export default defineConfig({
     port: 3000,
   },
   build: {
+    assetsInlineLimit: 100000000,
     rollupOptions: {
       output: {
         entryFileNames: "assets/[name].js",

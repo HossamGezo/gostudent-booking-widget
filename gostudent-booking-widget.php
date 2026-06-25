@@ -10,24 +10,24 @@
  * Text Domain: gostudent-booking-widget
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) { // Ab-s-path -> Absolute Path
     exit; 
 }
 
 function gostudent_booking_render_widget() {
     
-    wp_enqueue_style(
+    wp_enqueue_style( // WordPress Global Function
         'gostudent-booking-style',
         plugin_dir_url( __FILE__ ) . 'dist/assets/index.css',
         array(),
-        '1.0.0'
+        time() 
     );
 
     wp_enqueue_script(
         'gostudent-booking-script',
         plugin_dir_url( __FILE__ ) . 'dist/assets/index.js',
         array(),
-        '1.0.0',
+        time(), 
         true
     );
 

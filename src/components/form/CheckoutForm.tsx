@@ -1,9 +1,10 @@
 import type { UseFormRegister, FieldErrors } from "react-hook-form";
-import { type BookingFormData } from "@utils/validationSchema";
-import { translations, translateError } from "@constants/translations"; // استيراد دالة الترجمة
 
 import { COUNTRIES } from "@constants/countries";
 import { MONTHLY_SESSIONS_OPTIONS } from "@constants/pricing";
+import { translations, translateError } from "@constants/translations";
+
+import { type BookingFormData } from "@utils/validationSchema";
 
 import Input from "@components/ui/Input";
 import Select from "@components/ui/Select";
@@ -11,30 +12,29 @@ import Title from "@components/ui/Title";
 import PhoneInput from "@components/form/PhoneInput";
 import CardDetailsInput from "@components/form/CardDetailsInput";
 
+import sepaIcon from "../../../public/sepa.svg";
+import visaIcon from "../../../public/payment-methods.svg";
+
+// --- ErrorMsg Costum Component
+
 const ErrorMsg = ({ msg, lang }: { msg?: string; lang: "en" | "ar" }) => {
   if (!msg) return null;
-  return (
-    <span className="text-status-error mt-1.5 block text-[10px] leading-tight font-medium">
-      {translateError(msg, lang)}
-    </span>
-  );
+  return <span className="text-status-error mt-1.5 block text-[10px] font-medium">{translateError(msg, lang)}</span>;
 };
 
 interface CheckoutFormProps {
-  sessionsCount: number;
-  setSessionsCount: React.Dispatch<React.SetStateAction<number>>;
   register: UseFormRegister<BookingFormData>;
   errors: FieldErrors<BookingFormData>;
   lang: "en" | "ar";
 }
 
-const CheckoutForm = ({ sessionsCount, setSessionsCount, register, errors, lang }: CheckoutFormProps) => {
+const CheckoutForm = ({ register, errors, lang }: CheckoutFormProps) => {
   const t = translations[lang];
 
   return (
     <section className="bg-text-inverse relative col-span-1 p-5 lg:col-span-6 lg:px-12 lg:py-8">
       <div className="mb-5 flex flex-col items-center justify-center text-center">
-        <h2 className="text-[15px] font-bold lg:text-[18px]">{t.title}</h2>
+        <h2 className="text-[15px]! font-bold! lg:text-[18px]!">{t.title}</h2>
         <p className="text-[12px] font-extralight lg:text-[13px]">{t.subtitle}</p>
       </div>
 
@@ -42,13 +42,13 @@ const CheckoutForm = ({ sessionsCount, setSessionsCount, register, errors, lang 
         {/* --- Phone Inputs --- */}
         <div>
           <Title title={t.loginPhone} note={t.loginPhoneNote} lang={lang} />
-          <PhoneInput {...register("loginPhone")} />
+          <PhoneInput countryName="loginPhoneCountry" phoneName="loginPhone" register={register} autoFocus />
           <ErrorMsg msg={errors.loginPhone?.message} lang={lang} />
         </div>
 
         <div>
           <Title title={t.contactPhone} note={t.contactPhoneNote} lang={lang} />
-          <PhoneInput {...register("contactPhone")} />
+          <PhoneInput countryName="contactPhoneCountry" phoneName="contactPhone" register={register} />
           <ErrorMsg msg={errors.contactPhone?.message} lang={lang} />
         </div>
 
@@ -68,12 +68,12 @@ const CheckoutForm = ({ sessionsCount, setSessionsCount, register, errors, lang 
         <div>
           <Title title={t.billingAddress} />
           <div className="flex flex-col gap-6.5">
-            <div className="flex gap-3">
-              <div className="w-[70%]">
+            <div className="flex gap-4">
+              <div className="w-[80%]">
                 <Input placeholder={t.address} {...register("address")} />
                 <ErrorMsg msg={errors.address?.message} lang={lang} />
               </div>
-              <div className="w-[30%]">
+              <div className="w-[20%]">
                 <Input placeholder={t.nr} {...register("nr")} />
                 <ErrorMsg msg={errors.nr?.message} lang={lang} />
               </div>
@@ -110,8 +110,7 @@ const CheckoutForm = ({ sessionsCount, setSessionsCount, register, errors, lang 
           <Title title={t.monthlySessions} />
           <Select
             className="border-border-default w-full border py-3"
-            value={sessionsCount}
-            onChange={(e) => setSessionsCount(Number(e.target.value))}
+            {...register("sessions", { valueAsNumber: true })}
           >
             {MONTHLY_SESSIONS_OPTIONS.map((session) => (
               <option key={session.value} value={session.value}>
@@ -130,13 +129,13 @@ const CheckoutForm = ({ sessionsCount, setSessionsCount, register, errors, lang 
             className="border-border-default flex cursor-pointer items-center gap-2.5 rounded-[3px] rounded-b-none border border-b-0 px-1.5 pt-3 pb-1.5"
           >
             <input type="radio" value="sepa" id="sepa" {...register("paymentMethod")} />
-            <img src="./sepa.svg" alt="SEPA" className="h-3 w-auto" />
+            <img src={sepaIcon} alt="SEPA" className="h-3 w-auto" />
           </label>
 
           <div className="border-border-default rounded-[3px] rounded-t-none border p-1.5 pb-10">
             <label htmlFor="visa" className="mb-2 flex cursor-pointer items-center gap-1.5">
               <input type="radio" value="visa" id="visa" {...register("paymentMethod")} />
-              <img src="./payment-methods.svg" alt="Visa/Mastercard" className="h-5.5 w-auto" />
+              <img src={visaIcon} alt="Visa/Mastercard" className="h-5.5 w-auto" />
             </label>
 
             <div className="flex flex-col gap-2">

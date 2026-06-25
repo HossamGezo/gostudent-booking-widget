@@ -10,7 +10,7 @@ const Title = ({ title, note, lang = "en", className, ...props }: TitleProps) =>
   const preferablyText = lang === "ar" ? "يفضل" : "preferably";
 
   return (
-    <h3 className={cn("text-text-secondary mb-1.5 text-[10px] font-semibold", className)} {...props}>
+    <h3 className={cn("text-text-secondary mb-1.5 text-[10px]! font-semibold!", className)} {...props}>
       {title}{" "}
       {note && (
         <span className="text-text-primary font-normal">
